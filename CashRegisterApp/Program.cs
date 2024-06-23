@@ -76,7 +76,7 @@ while (transactions > 0)
     Console.WriteLine($"\t Using {paymentFives} five dollar bills");
     Console.WriteLine($"\t Using {paymentOnes} one dollar bills");
 
-    // MakeChange manages the transaction and updates the till 
+    // MakeChange manages the transaction and updates the till
     string transactionMessage = MakeChange(itemCost, cashTill, paymentTwenties, paymentTens, paymentFives, paymentOnes);
 
     // Backup Calculation - each transaction adds current "itemCost" to the till
@@ -111,7 +111,10 @@ static void LoadTillEachMorning(int[,] registerDailyStartingCash, int[] cashTill
     cashTill[3] = registerDailyStartingCash[3, 1];
 }
 
-
+// The MakeChange method manages the money till during each transaction. It updates the till and returns a message to the main program.
+// The MakeChange method accepts a cash payment and then determines how many bills of each denomination must be returned to the customer.
+// MakeChange first checks that the customer's payment covers the transaction.
+// If sufficient, it determines the change using the largest to smallest bill denominations.
 static string MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, int fives = 0, int ones = 0)
 {
     string transactionMessage = "";
@@ -166,6 +169,7 @@ static string MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, i
     return transactionMessage;
 }
 
+// The LogTillStatus method uses the cashTill array to report the current contents of the till.
 static void LogTillStatus(int[] cashTill)
 {
     Console.WriteLine("The till currently has:");
@@ -176,6 +180,7 @@ static void LogTillStatus(int[] cashTill)
     Console.WriteLine();
 }
 
+// The TillAmountSummary method uses the cashTill array to calculate of the current cash balance that's available in till.
 static string TillAmountSummary(int[] cashTill)
 {
     return $"The till has {cashTill[3] * 20 + cashTill[2] * 10 + cashTill[1] * 5 + cashTill[0]} dollars";
