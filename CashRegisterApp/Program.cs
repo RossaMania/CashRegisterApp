@@ -79,22 +79,15 @@ while (transactions > 0)
 try
 {
     // MakeChange manages the transaction and updates the till
-    string transactionMessage = MakeChange(itemCost, cashTill, paymentTwenties, paymentTens, paymentFives, paymentOnes);
+    MakeChange(itemCost, cashTill, paymentTwenties, paymentTens, paymentFives, paymentOnes);
+
+    Console.WriteLine($"Transaction successfully completed.");
+    registerCheckTillTotal += itemCost;
 }
 catch (InvalidOperationException e)
 {
   Console.WriteLine($"Could not complete transaction: {e.Message}");
 }
-    // Backup Calculation - each transaction adds current "itemCost" to the till
-    if (transactionMessage == "transaction succeeded")
-    {
-        Console.WriteLine($"Transaction successfully completed.");
-        registerCheckTillTotal += itemCost;
-    }
-    else
-    {
-        Console.WriteLine($"Transaction unsuccessful: {transactionMessage}");
-    }
 
     Console.WriteLine(TillAmountSummary(cashTill));
     Console.WriteLine($"Expected till value: {registerCheckTillTotal}\n\r");
@@ -121,9 +114,8 @@ static void LoadTillEachMorning(int[,] registerDailyStartingCash, int[] cashTill
 // The MakeChange method accepts a cash payment and then determines how many bills of each denomination must be returned to the customer.
 // MakeChange first checks that the customer's payment covers the transaction.
 // If sufficient, it determines the change using the largest to smallest bill denominations.
-static string MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, int fives = 0, int ones = 0)
+static void MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, int fives = 0, int ones = 0)
 {
-    string transactionMessage = "";
 
     cashTill[3] += twenties;
     cashTill[2] += tens;
@@ -169,10 +161,6 @@ static string MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, i
     if (changeNeeded > 0)
         throw new InvalidOperationException("InvalidOperationException: The till is unable to make the correct change.");
 
-    if (transactionMessage == "")
-        transactionMessage = "transaction succeeded";
-
-    return transactionMessage;
 }
 
 // The LogTillStatus method uses the cashTill array to report the current contents of the till.
