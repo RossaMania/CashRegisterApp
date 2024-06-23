@@ -18,7 +18,7 @@ expected.
 */
 
 string? readResult = null;
-bool useTestData = true;
+bool useTestData = false;
 
 Console.Clear();
 
@@ -92,7 +92,7 @@ while (transactions > 0)
 
     Console.WriteLine(TillAmountSummary(cashTill));
     Console.WriteLine($"Expected till value: {registerCheckTillTotal}\n\r");
-    Console.WriteLine();
+    Console.WriteLine(); // This line is for spacing and debugging breakpoint.
 }
 
 Console.WriteLine("Press the Enter key to exit");
@@ -148,7 +148,7 @@ static string MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, i
 
     while ((changeNeeded > 4) && (cashTill[1] > 0))
     {
-        cashTill[2]--;
+        cashTill[1]--;
         changeNeeded -= 5;
         Console.WriteLine("\t A five");
     }
