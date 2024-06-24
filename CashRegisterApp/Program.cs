@@ -85,9 +85,17 @@ try
     registerCheckTillTotal += itemCost;
 }
 catch (InvalidOperationException e)
-{
-  Console.WriteLine($"Could not complete transaction: {e.Message}");
-}
+    {
+        if (e.Message.Contains("The till is out of"))
+        {
+            Console.WriteLine($"Could not complete transaction: {e.Message}");
+            break; // Exit the loop if the store is closed due to insufficient denominations
+        }
+        else
+        {
+            Console.WriteLine($"Could not complete transaction: {e.Message}");
+        }
+    }
 
     Console.WriteLine(TillAmountSummary(cashTill));
     Console.WriteLine($"Expected till value: {registerCheckTillTotal}\n\r");
@@ -161,15 +169,20 @@ static void MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, int
                 changeNeeded -= 1;
                 Console.WriteLine("\t A one");
             }
-            else
+             else
             {
+                // Determine the denomination that is missing
+                string missingDenomination = (changeNeeded >= 20) ? "twenty" : 
+                                             (changeNeeded >= 10) ? "ten" : 
+                                             (changeNeeded >= 5) ? "five" : "one";
+
                 // If no appropriate denomination is available, throw an exception and revert changes
-                throw new InvalidOperationException("The till is unable to make the correct change.");
+                throw new InvalidOperationException($"The till is unable to make the correct change. The till is out of {missingDenomination} dollar bills! Store closed!");
             }
         }
 
         // If all change is given successfully, print transaction success message
-        Console.WriteLine("Transaction successfully completed.");
+        Console.WriteLine("Customer has been given change!");
     }
     catch (InvalidOperationException e)
     {
