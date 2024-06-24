@@ -46,7 +46,7 @@ Console.WriteLine($"Expected till value: {registerCheckTillTotal}\n\r");
 
 var valueGenerator = new Random((int)DateTime.Now.Ticks);
 
-int transactions = 10;
+int transactions = 100;
 
 if (useTestData)
 {
@@ -56,7 +56,7 @@ if (useTestData)
 while (transactions > 0)
 {
     transactions -= 1;
-    int itemCost = valueGenerator.Next(2, 20);
+    int itemCost = valueGenerator.Next(2, 49);
 
     if (useTestData)
     {
