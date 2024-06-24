@@ -88,12 +88,12 @@ catch (InvalidOperationException e)
     {
         if (e.Message.Contains("The till is out of"))
         {
-            Console.WriteLine($"Could not complete transaction: {e.Message}");
+            Console.WriteLine($"Could not make transaction: {e.Message}");
             break; // Exit the loop if the store is closed due to insufficient denominations
         }
         else
         {
-            Console.WriteLine($"Could not complete transaction: {e.Message}");
+            Console.WriteLine($"Could not make transaction: {e.Message}");
         }
     }
 
@@ -177,7 +177,7 @@ static void MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, int
                                              (changeNeeded >= 5) ? "five" : "one";
 
                 // If no appropriate denomination is available, throw an exception and revert changes
-                throw new InvalidOperationException($"The till is unable to make the correct change. The till is out of {missingDenomination} dollar bills! Store closed!");
+                throw new InvalidOperationException($"The till is unable to make change for the cash provided! Out of {missingDenomination} dollar bills! Store closed!");
             }
         }
 
