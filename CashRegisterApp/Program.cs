@@ -116,52 +116,74 @@ static void LoadTillEachMorning(int[,] registerDailyStartingCash, int[] cashTill
 // If sufficient, it determines the change using the largest to smallest bill denominations.
 static void MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, int fives = 0, int ones = 0)
 {
+    // Calculate the amountPaid before modifying the till
+    int amountPaid = twenties * 20 + tens * 10 + fives * 5 + ones;
 
+    // Perform checks before modifying the till
+    if (amountPaid < cost)
+        throw new InvalidOperationException("Not enough money provided to complete the transaction.");
+
+    int changeNeeded = amountPaid - cost;
+
+    // Now modify the till only if the transaction can be completed
     cashTill[3] += twenties;
     cashTill[2] += tens;
     cashTill[1] += fives;
     cashTill[0] += ones;
 
-    int amountPaid = twenties * 20 + tens * 10 + fives * 5 + ones;
-    int changeNeeded = amountPaid - cost;
-
-    if (changeNeeded < 0)
-        throw new InvalidOperationException("InvalidOperationException: Not enough money provided to complete the transaction.");
-
-    Console.WriteLine("Cashier Returns:");
-
-    while ((changeNeeded > 19) && (cashTill[3] > 0))
+     // If the transaction cannot be completed due to insufficient change, revert the till modification
+    try
     {
-        cashTill[3]--;
-        changeNeeded -= 20;
-        Console.WriteLine("\t A twenty");
-    }
+        Console.WriteLine("Cashier Returns:");
+        while (changeNeeded > 0)
+        {
+            if (changeNeeded >= 20 && cashTill[3] > 0)
+            {
+                cashTill[3]--;
+                changeNeeded -= 20;
+                Console.WriteLine("\t A twenty");
+            }
+            else if (changeNeeded >= 10 && cashTill[2] > 0)
+            {
+                cashTill[2]--;
+                changeNeeded -= 10;
+                Console.WriteLine("\t A ten");
+            }
+            else if (changeNeeded >= 5 && cashTill[1] > 0)
+            {
+                cashTill[1]--;
+                changeNeeded -= 5;
+                Console.WriteLine("\t A five");
+            }
+            else if (changeNeeded >= 1 && cashTill[0] > 0)
+            {
+                cashTill[0]--;
+                changeNeeded -= 1;
+                Console.WriteLine("\t A one");
+            }
+            else
+            {
+                // If no appropriate denomination is available, throw an exception and revert changes
+                throw new InvalidOperationException("The till is unable to make the correct change.");
+            }
+        }
 
-    while ((changeNeeded > 9) && (cashTill[2] > 0))
+        // If all change is given successfully, print transaction success message
+        Console.WriteLine("Transaction successfully completed.");
+    }
+    catch (InvalidOperationException e)
     {
-        cashTill[2]--;
-        changeNeeded -= 10;
-        Console.WriteLine("\t A ten");
+        // Revert the till to its original state before the transaction
+        cashTill[3] -= twenties;
+        cashTill[2] -= tens;
+        cashTill[1] -= fives;
+        cashTill[0] -= ones;
+
+        // Re-throw the exception for higher-level handling
+        throw new InvalidOperationException(e.Message);
     }
-
-    while ((changeNeeded > 4) && (cashTill[1] > 0))
-    {
-        cashTill[1]--;
-        changeNeeded -= 5;
-        Console.WriteLine("\t A five");
-    }
-
-    while ((changeNeeded > 0) && (cashTill[0] > 0))
-    {
-        cashTill[0]--;
-        changeNeeded--;
-        Console.WriteLine("\t A one");
-    }
-
-    if (changeNeeded > 0)
-        throw new InvalidOperationException("InvalidOperationException: The till is unable to make the correct change.");
-
 }
+
 
 // The LogTillStatus method uses the cashTill array to report the current contents of the till.
 static void LogTillStatus(int[] cashTill)
