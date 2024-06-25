@@ -172,8 +172,8 @@ static void MakeChange(int cost, int[] cashTill, int twenties, int tens = 0, int
              else
             {
                 // Determine the denomination that is missing
-                string missingDenomination = (changeNeeded >= 20) ? "twenty" : 
-                                             (changeNeeded >= 10) ? "ten" : 
+                string missingDenomination = (changeNeeded >= 20) ? "twenty" :
+                                             (changeNeeded >= 10) ? "ten" :
                                              (changeNeeded >= 5) ? "five" : "one";
 
                 // If no appropriate denomination is available, throw an exception and revert changes
